@@ -16,68 +16,88 @@
         let innerCarousel = $('#spookyCarouselInner');
         var width = $(window).width();
         var height = $(window).height();
-        let images = [
-            "https://daysto.imgix.net/backgrounds/halloween/halloween-forest-pumpkins.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress",
-            "https://daysto.imgix.net/backgrounds/halloween/halloween-graveyard.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress",
-            "https://daysto.imgix.net/backgrounds/halloween/halloween-house.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress",
-            "https://daysto.imgix.net/backgrounds/halloween/halloween-silhouette-tricktreat.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress",
-            "https://daysto.imgix.net/backgrounds/halloween-glowing-pumpkins.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress"
-        ];
+        let images = [];
     
-        for (let i = 0; i < images.length; i++) {
-            appendEl = 
-            '<div class="carousel-item' + (i === 0 ? ' active"' : '"') + '>'
-                + '<img src="'+ images[i] + '" class="d-block w-100" alt="Pumpkin Forest">'
-                + '<div class="carousel-caption d-flex flex-column justify-content-center h-100">'
-                +    '<h1>'
-                +        '<div class="spooky-text time-to-halloween"></div>'
-                +    '</h1>'
-                +    '<div class="spooky-text">Until Halloween</div>'
-                +'</div>'
-            + '</div>';
-            innerCarousel.append(appendEl);
-        }
+        loadImages();
+        buildCarousel();
 
-        let timeToHalloween = $('.time-to-halloween');
         const halloweenDate = new Date(2021, 9, 31);
         let i = 1;
+		
+		$( window ).resize(function() {
+            destroyCarousel();
+            loadImages();
+            buildCarousel();
+		});
+
+        function loadImages() {
+            images = [
+                "https://daysto.imgix.net/backgrounds/halloween/halloween-forest-pumpkins.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress",
+                "https://daysto.imgix.net/backgrounds/halloween/halloween-graveyard.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress",
+                "https://daysto.imgix.net/backgrounds/halloween/halloween-house.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress",
+                "https://daysto.imgix.net/backgrounds/halloween/halloween-silhouette-tricktreat.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress",
+                "https://daysto.imgix.net/backgrounds/halloween-glowing-pumpkins.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress"
+            ];
+        };
+
+        function buildCarousel() {
+            for (let i = 0; i < images.length; i++) {
+                appendEl = 
+                '<div class="carousel-item' + (i === 0 ? ' active"' : '"') + '>'
+                    + '<img src="'+ images[i] + '" class="d-block w-100" alt="Pumpkin Forest">'
+                    + '<div class="carousel-caption d-flex flex-column justify-content-center h-100">'
+                    +    '<h1>'
+                    +        '<div class="spooky-text time-to-halloween"></div>'
+                    +    '</h1>'
+                    +    '<div class="spooky-text">Until Halloween</div>'
+                    +'</div>'
+                + '</div>';
+                innerCarousel.append(appendEl);
+            }
+        };
+
+        function destroyCarousel() {
+            innerCarousel.empty();
+        };
+		
 		$(document).ready(function() {
 			let interval = setInterval(function() {
-            let now = new Date();
-    
-            let diff = Math.abs(halloweenDate - now) / 1000;
-    
-            let day = Math.floor(diff / 86400);
-            diff -= day * 86400;
-    
-            let hour = Math.floor(diff / 3600) % 24;
-            diff -= hour * 3600;
-    
-            let minute = Math.floor(diff / 60) % 60;
-            diff -= minute * 60;
-    
-            let second = Math.floor(diff % 60);
-    
-            timeToHalloween.each(
-                function(i, el) {
-                    $(el).html(day + " day" + (day !== 1 ? 's ' : ' ')
-                    + hour + " hour" + (hour !== 1 ? 's ' : ' ')
-                    + minute + " minute" + (minute !== 1 ? 's ' : ' ')
-                    + second + " second" + (second !== 1 ? 's' : ''));
+                let timeToHalloween = $('.time-to-halloween');
+                let now = new Date();
+        
+                let diff = Math.abs(halloweenDate - now) / 1000;
+        
+                let day = Math.floor(diff / 86400);
+                diff -= day * 86400;
+        
+                let hour = Math.floor(diff / 3600) % 24;
+                diff -= hour * 3600;
+        
+                let minute = Math.floor(diff / 60) % 60;
+                diff -= minute * 60;
+        
+                let second = Math.floor(diff % 60);
+        
+                timeToHalloween.each(
+                    function(i, el) {
+                        $(el).html(day + " day" + (day > 0 ? 's ' : ' ')
+                        + hour + " hour" + (hour > 0 ? 's ' : ' ')
+                        + minute + " minute" + (minute > 0 ? 's ' : ' ')
+                        + second + " second" + (second > 0 ? 's' : ''));
+                    }
+                );
+                
+                if (i % 10 === 0) {
+                    $('#backgroundCarousel').carousel('next');
                 }
-            );
 			
-			if (i % 10 === 0) {
-				$('#backgroundCarousel').carousel('next');
-			}
-			
-			// reset in case this is left open for a very long time
-			if (i > 100000) {
-				i = 0;
-			}
-			i++;
-        }, 1000);
-		});
+                // reset in case this is left open for a very long time
+                if (i > 100000) {
+                        i = 0;
+                    }
+                    i++;
+                }, 1000);
+		    });
         </script>
         <style>
             .spooky-text {
