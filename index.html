@@ -8,7 +8,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div id="backgroundCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <div id="backgroundCarousel" class="carousel slide carousel-fade" data-ride="carousel" data-interval="false">
         <div id="spookyCarouselInner" class="carousel-inner">
         </div>
     </div>
@@ -26,7 +26,7 @@
     
         for (let i = 0; i < images.length; i++) {
             appendEl = 
-            '<div class="carousel-item' + (i === 0 ? ' active"' : '"') + ' data-interval="10000">'
+            '<div class="carousel-item' + (i === 0 ? ' active"' : '"') + '>'
                 + '<img src="'+ images[i] + '" class="d-block w-100" alt="Pumpkin Forest">'
                 + '<div class="carousel-caption d-flex flex-column justify-content-center h-100">'
                 +    '<h1>'
@@ -35,13 +35,14 @@
                 +    '<div class="spooky-text">Until Halloween</div>'
                 +'</div>'
             + '</div>';
-            console.log(appendEl)
             innerCarousel.append(appendEl);
         }
 
         let timeToHalloween = $('.time-to-halloween');
         const halloweenDate = new Date(2021, 9, 31);
-        let interval = setInterval(function() {
+        let i = 1;
+		$(document).ready(function() {
+			let interval = setInterval(function() {
             let now = new Date();
     
             let diff = Math.abs(halloweenDate - now) / 1000;
@@ -65,10 +66,18 @@
                     + second + " second" + (second > 0 ? 's' : ''));
                 }
             );
+			
+			if (i % 10 === 0) {
+				$('#backgroundCarousel').carousel('next');
+			}
+			
+			// reset in case this is left open for a very long time
+			if (i > 100000) {
+				i = 0;
+			}
+			i++;
         }, 1000);
-        // Must restart carousel for interval to work because elements are dynamically appended
-        $("#backgroundCarousel").carousel("pause").removeData();
-        $("#backgroundCarousel").carousel(0);
+		});
         </script>
         <style>
             .spooky-text {
