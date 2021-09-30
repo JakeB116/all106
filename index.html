@@ -14,27 +14,30 @@
     </div>
     <script>
         let innerCarousel = $('#spookyCarouselInner');
-        var width = 1280;//$(window).width();
-        var height = 720;//$(window).height();
+        var width = $(window).width();
+        var height = $(window).height();
         let images = [
-            `https://daysto.imgix.net/backgrounds/halloween/halloween-forest-pumpkins.jpg?w=${width}&h=${height}&q=100&fit=crop&auto=format,compress`,
-            `https://daysto.imgix.net/backgrounds/halloween/halloween-graveyard.jpg?w=${width}&h=${height}&q=100&fit=crop&auto=format,compress`,
-            `https://daysto.imgix.net/backgrounds/halloween/halloween-house.jpg?w=${width}&h=${height}&q=100&fit=crop&auto=format,compress`,
-            `https://daysto.imgix.net/backgrounds/halloween/halloween-silhouette-tricktreat.jpg?w=${width}&h=${height}&q=100&fit=crop&auto=format,compress`,
-            `https://daysto.imgix.net/backgrounds/halloween-glowing-pumpkins.jpg?w=${width}&h=${height}&q=100&fit=crop&auto=format,compress`
+            "https://daysto.imgix.net/backgrounds/halloween/halloween-forest-pumpkins.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress",
+            "https://daysto.imgix.net/backgrounds/halloween/halloween-graveyard.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress",
+            "https://daysto.imgix.net/backgrounds/halloween/halloween-house.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress",
+            "https://daysto.imgix.net/backgrounds/halloween/halloween-silhouette-tricktreat.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress",
+            "https://daysto.imgix.net/backgrounds/halloween-glowing-pumpkins.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress"
         ];
     
-        images.forEach(function(img, i) {
-            innerCarousel.append(`<div class="carousel-item${i === 0 ? ' active' : ''}" data-interval="10000">
-                    <img src="${img}" class="d-block w-100" alt="Pumpkin Forest">
-                    <div class="carousel-caption d-flex flex-column justify-content-center h-100">
-                        <h1>
-                            <div class="spooky-text time-to-halloween"></div>
-                        </h1>
-                        <div class="spooky-text">Until Halloween</div>
-                    </div>
-                </div>`);
-        });
+        for (let i = 0; i < images.length; i++) {
+            appendEl = 
+            '<div class="carousel-item' + (i === 0 ? ' active"' : '"') + ' data-interval="10000">'
+                + '<img src="'+ images[i] + '" class="d-block w-100" alt="Pumpkin Forest">'
+                + '<div class="carousel-caption d-flex flex-column justify-content-center h-100">'
+                +    '<h1>'
+                +        '<div class="spooky-text time-to-halloween"></div>'
+                +    '</h1>'
+                +    '<div class="spooky-text">Until Halloween</div>'
+                +'</div>'
+            + '</div>';
+            console.log(appendEl)
+            innerCarousel.append(appendEl);
+        }
 
         let timeToHalloween = $('.time-to-halloween');
         const halloweenDate = new Date(2021, 9, 31);
@@ -56,7 +59,10 @@
     
             timeToHalloween.each(
                 function(i, el) {
-                    $(el).html(`${day} day${day > 0 ? 's' : ''} ${hour} hour${hour > 0 ? 's' : ''} ${minute} minute${minute > 0 ? 's' : ''} ${second} second${second > 0 ? 's' : ''}`);
+                    $(el).html(day + " day" + (day > 0 ? 's ' : ' ')
+                    + hour + "hour" + (hour > 0 ? 's ' : ' ')
+                    + minute + "minute" + (minute > 0 ? 's ' : ' ')
+                    + second + "second" + (second > 0 ? 's' : ''));
                 }
             );
         }, 1000);
@@ -70,6 +76,11 @@
                 font-size: 73px;
                 color: #FF5A00;
                 -webkit-text-stroke: 2px black;
+                text-shadow:
+                    -1px -1px 0 #000,  
+                    1px -1px 0 #000,
+                    -1px 1px 0 #000,
+                    1px 1px 0 #000;
             };
         </style>
 </body>
