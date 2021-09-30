@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="http://fonts.cdnfonts.com/css/colwell-2" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+<body>
+    <div id="backgroundCarousel" class="carousel slide carousel-fade" data-ride="carousel" data-interval="false">
+        <div id="holidayCarouselInner" class="carousel-inner">
+        </div>
+		<div id="snow" class="snow"></div>
+    </div>
+    <script>
+        let innerCarousel = $('#holidayCarouselInner');
+        let resizeTimeout;
+        let interval;
+        let images = [];
+		let i = 1;
+		
+        loadImages();
+        buildCarousel(0);
+		
+		$(window).resize(function() {
+            if (resizeTimeout) {
+                clearTimeout(resizeTimeout);
+            }
+            resizeTimeout = setTimeout(function() {
+                // Get the currently active image
+                let activeIndex = 0;
+                $('.carousel-item').each(function(i, el) {
+                    if ($(el).hasClass('active')) {
+                        activeIndex = i;
+                    }
+                });
+                loadImages();
+                buildCarousel(activeIndex);
+                tickInterval();
+            }, 300);
+		});
+		
+        function loadImages() {
+            var width = $(window).width();
+            var height = $(window).height();
+			let queryParams = "?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress";
+            images = [
+                "https://daysto.imgix.net/backgrounds/christmas-green-presents.jpg" + queryParams,
+                "https://daysto.imgix.net/backgrounds/christmas1.jpg" + queryParams,
+                "https://daysto.imgix.net/backgrounds/christmas2.jpg" + queryParams,
+                "https://daysto.imgix.net/backgrounds/christmas3.jpg" + queryParams,
+                "https://daysto.imgix.net/backgrounds/christmas4.jpg" + queryParams,
+				"https://daysto.imgix.net/backgrounds/christmas5.jpg" + queryParams,
+				"https://daysto.imgix.net/backgrounds/santa-1.jpg" + queryParams,
+				"https://daysto.imgix.net/backgrounds/santa-2.jpg" + queryParams,
+				"https://daysto.imgix.net/backgrounds/santa-3.jpg" + queryParams
+            ];
+        };
+		
+        function tickInterval() {
+            if (interval) {
+                clearInterval(interval);
+            }
+            interval = setInterval(function() {
+                let timeToHoliday = $('.time-to-holiday');
+                let now = new Date();
+				const holidayDate = new Date(now.getFullYear(), 11, 25);
+        
+                let diff = Math.abs(holidayDate - now) / 1000;
+        
+                let day = Math.floor(diff / 86400);
+                diff -= day * 86400;
+        
+                let hour = Math.floor(diff / 3600) % 24;
+                diff -= hour * 3600;
+        
+                let minute = Math.floor(diff / 60) % 60;
+                diff -= minute * 60;
+        
+                let second = Math.floor(diff % 60);
+        
+                timeToHoliday.each(
+                    function(i, el) {
+                        $(el).html(day + " day" + (day > 0 ? 's ' : ' ')
+                        + hour + " hour" + (hour > 0 ? 's ' : ' ')
+                        + minute + " minute" + (minute > 0 ? 's ' : ' ')
+                        + second + " second" + (second > 0 ? 's' : ''));
+                    }
+                );
+                
+                if (i % 10 === 0) {
+                    $('#backgroundCarousel').carousel('next');
+                }
+			
+                // reset in case this is left open for a very long time
+                if (i > 100000) {
+                        i = 0;
+                    }
+                    i++;
+                }, 1000);
+        }
+
+        function buildCarousel(activeIndex) {
+            innerCarousel.empty();
+            for (let i = 0; i < images.length; i++) {
+                appendEl = 
+                '<div class="carousel-item' + (i === activeIndex ? ' active"' : '"') + '>'
+                    + '<img src="'+ images[i] + '" class="d-block">'
+                    + '<div class="carousel-caption d-flex flex-column justify-content-center h-100">'
+                    +    '<h1>'
+                    +        '<div class="holiday-text time-to-holiday"></div>'
+                    +    '</h1>'
+                    +    '<div class="holiday-text">Until Christmas</div>'
+                    +'</div>'
+                + '</div>';
+                innerCarousel.append(appendEl);
+            }
+        };
+		
+		function createSnow() {
+			particlesJS("snow", {
+				"particles": {
+					"number": {
+						"value": 200,
+						"density": {
+							"enable": true,
+							"value_area": 800
+						}
+					},
+					"color": {
+						"value": "#ffffff"
+					},
+					"opacity": {
+						"value": 0.7,
+						"random": false,
+						"anim": {
+							"enable": false
+						}
+					},
+					"size": {
+						"value": 5,
+						"random": true,
+						"anim": {
+							"enable": false
+						}
+					},
+					"line_linked": {
+						"enable": false
+					},
+					"move": {
+						"enable": true,
+						"speed": 5,
+						"direction": "bottom",
+						"random": true,
+						"straight": false,
+						"out_mode": "out",
+						"bounce": false,
+						"attract": {
+							"enable": true,
+							"rotateX": 300,
+							"rotateY": 1200
+						}
+					}
+				},
+				"interactivity": {
+					"events": {
+						"onhover": {
+							"enable": false
+						},
+						"onclick": {
+							"enable": false
+						},
+						"resize": false
+					}
+				},
+				"retina_detect": true
+			});
+		};
+		
+		$(document).ready(function() {
+            tickInterval();
+			createSnow();
+        });
+        </script>
+        <style>
+            .holiday-text {
+                font-family: 'Colwell', sans-serif;
+                font-size: 4vw;
+                color: #A2CBE0;
+                text-shadow:
+                    -3px -3px 0 #000,  
+                    3px -3px 0 #000,
+                    -3px 3px 0 #000,
+                    3px 3px 0 #000;
+            };
+        </style>
+		<style>
+			.snow {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				pointer-events: none;
+				z-index: 1000;
+			};
+		</style>
+</body>
+</html>
