@@ -14,23 +14,37 @@
     </div>
     <script>
         let innerCarousel = $('#spookyCarouselInner');
-        var width = $(window).width();
-        var height = $(window).height();
+        let resizeTimeout;
+        let interval;
         let images = [];
     
         loadImages();
-        buildCarousel();
+        buildCarousel(0);
 
         const halloweenDate = new Date(2021, 9, 31);
         let i = 1;
 		
-		$( window ).resize(function() {
-            destroyCarousel();
-            loadImages();
-            buildCarousel();
+		$(window).resize(function() {
+            if (resizeTimeout) {
+                clearTimeout(resizeTimeout);
+            }
+            resizeTimeout = setTimeout(function() {
+                // Get the currently active image
+                let activeIndex = 0;
+                $('.carousel-item').each(function(i, el) {
+                    if ($(el).hasClass('active')) {
+                        activeIndex = i;
+                    }
+                });
+                loadImages();
+                buildCarousel(activeIndex);
+                tickInterval();
+            }, 300);
 		});
 
         function loadImages() {
+            var width = $(window).width();
+            var height = $(window).height();
             images = [
                 "https://daysto.imgix.net/backgrounds/halloween/halloween-forest-pumpkins.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress",
                 "https://daysto.imgix.net/backgrounds/halloween/halloween-graveyard.jpg?w="+width+"&h="+height+"&q=100&fit=crop&auto=format,compress",
@@ -40,28 +54,11 @@
             ];
         };
 
-        function buildCarousel() {
-            for (let i = 0; i < images.length; i++) {
-                appendEl = 
-                '<div class="carousel-item' + (i === 0 ? ' active"' : '"') + '>'
-                    + '<img src="'+ images[i] + '" class="d-block w-100" alt="Pumpkin Forest">'
-                    + '<div class="carousel-caption d-flex flex-column justify-content-center h-100">'
-                    +    '<h1>'
-                    +        '<div class="spooky-text time-to-halloween"></div>'
-                    +    '</h1>'
-                    +    '<div class="spooky-text">Until Halloween</div>'
-                    +'</div>'
-                + '</div>';
-                innerCarousel.append(appendEl);
+        function tickInterval() {
+            if (interval) {
+                clearInterval(interval);
             }
-        };
-
-        function destroyCarousel() {
-            innerCarousel.empty();
-        };
-		
-		$(document).ready(function() {
-			let interval = setInterval(function() {
+            interval = setInterval(function() {
                 let timeToHalloween = $('.time-to-halloween');
                 let now = new Date();
         
@@ -97,7 +94,29 @@
                     }
                     i++;
                 }, 1000);
-		    });
+        }
+
+        function buildCarousel(activeIndex) {
+            innerCarousel.empty();
+            for (let i = 0; i < images.length; i++) {
+                appendEl = 
+                '<div class="carousel-item' + (i === activeIndex ? ' active"' : '"') + '>'
+                    + '<img src="'+ images[i] + '" class="d-block w-100" alt="Pumpkin Forest">'
+                    + '<div class="carousel-caption d-flex flex-column justify-content-center h-100">'
+                    +    '<h1>'
+                    +        '<div class="spooky-text time-to-halloween"></div>'
+                    +    '</h1>'
+                    +    '<div class="spooky-text">Until Halloween</div>'
+                    +'</div>'
+                + '</div>';
+                innerCarousel.append(appendEl);
+            }
+        };
+		
+		$(document).ready(function() {
+            tickInterval();
+        });
+			
         </script>
         <style>
             .spooky-text {
