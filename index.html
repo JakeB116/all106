@@ -43,23 +43,22 @@
 			let activeIndex = getActiveIndex();
             images = [];
 			
-			imageSources = [
-				'./Pirates/pirate_1.jpg',
-				'./Pirates/pirate_2.jpg',
-				'./Pirates/pirate_3.jpg',
-				'./Pirates/pirate_4.jpg',
-				'./Pirates/pirate_5.jpg',
-				'./Pirates/pirate_6.jpg'
-			];
-			
-			$(imageSources).each(function(index, el) {
-				images = images.concat(buildImageContent(index, el, activeIndex, width, height));
+			images = images.concat({
+				timeLimit: 84,
+				type: 'video',
+				id: 'hook',
+				content: '<div style="width: 100vw; height: 100vh;" class="carousel-item' + (images.length === activeIndex ? ' active"' : '"') + '>'
+				+ '<video id="hook" width="' + width + '" height="' + height +' " muted><source src="./Fireworks/fireworks.mp4" type="video/mp4" /></video>'
+				+ '<div class="carousel-caption d-flex flex-column justify-content-center h-100">'
+                +    '<img class="logo" src="./ITSGLOW.png" height="50%" width="90%" />'
+                + '</div>'
+				+ '</div>'
 			});
         };
 		
 		function buildImageContent(index, source, activeIndex, width, height) {
 			return {
-				timeLimit: 10,
+				timeLimit: 151,
 				content: '<div class="carousel-item' + (index === activeIndex ? ' active"' : '"') + '>'
                     + '<img src="'+ source + '" class="d-block" height="' + height + '" width="' + width + '">'
                     + '<div class="carousel-caption d-flex flex-column justify-content-center h-100">'
@@ -80,6 +79,12 @@
                     $('#backgroundCarousel').carousel('next');
 					tick = 0;
                 }
+				
+				let image = images[activeIndex];
+				
+				if (image.type === 'video') {
+					$('#' + image.id).trigger('play');
+				}
 				
 				tick++;
 			}, 1000);
@@ -181,7 +186,6 @@
 		
 		$(document).ready(function() {
             tickInterval();
-			createSnow();
         });
         </script>
         <style>
