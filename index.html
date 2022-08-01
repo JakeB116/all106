@@ -43,26 +43,36 @@
 			let activeIndex = getActiveIndex();
             images = [];
 			
-			images = images.concat({
+			imageSources = [
+				'./Pokemon/pokemon_1.jpg',
+				'./Pokemon/pokemon_2.png',
+				'./Pokemon/pokemon_3.jpg',
+				'./Pokemon/pokemon_4.jpeg',
+				'./Pokemon/pokemon_5.png',
+				'./Pokemon/pokemon_6.jpg'
+			];
+			
+			$(imageSources).each(function(index, el) {
+				images = images.concat(buildImageContent(index, el, activeIndex, width, height));
+			});
+			
+			/*images = images.concat({
 				timeLimit: 84,
 				type: 'video',
 				id: 'hook',
-				content: '<div style="width: 100vw; height: 100vh;" class="carousel-item' + (images.length === activeIndex ? ' active"' : '"') + '>'
-				+ '<video id="hook" width="' + width + '" height="' + height +' " muted><source src="./Fireworks/fireworks.mp4" type="video/mp4" /></video>'
-				+ '<div class="carousel-caption d-flex flex-column justify-content-center h-100">'
-                +    '<img class="logo" src="./ITSGLOW.png" height="50%" width="90%" />'
-                + '</div>'
+				content: '<div style="width: 100vw; height: 100vh;" class="carousel-item star-wars' + (images.length === activeIndex ? ' active"' : '"') + '>'
+				+ '<video id="hook" width="' + width + '" height="' + height +' " muted><source src="./Pirates/hook.mp4" type="video/mp4" /></video>'
 				+ '</div>'
-			});
+			});*/
         };
 		
 		function buildImageContent(index, source, activeIndex, width, height) {
 			return {
-				timeLimit: 151,
+				timeLimit: 10,
 				content: '<div class="carousel-item' + (index === activeIndex ? ' active"' : '"') + '>'
                     + '<img src="'+ source + '" class="d-block" height="' + height + '" width="' + width + '">'
                     + '<div class="carousel-caption d-flex flex-column justify-content-center h-100">'
-                    +    '<img class="logo" src="./ITSGLOW.png" height="50%" width="90%" />'
+                    +    '<img class="logo" src="./Pokemon/ITSLOGOPIKAPEEK.png" height="50%" width="90%" />'
                     +'</div>'
                 + '</div>'
 			};
@@ -122,9 +132,9 @@
 						"nb_sides": 5
 					  },
 					  "image": {
-						"src": "./Pirates/jolly-roger.png",
-						"width": 820,
-						"height": 513
+						"src": "./Pokemon/pokeball.png",
+						"width": 699,
+						"height": 698
 					  }
 					},
 					"number": {
@@ -145,7 +155,7 @@
 						}
 					},
 					"size": {
-						"value": 100,
+						"value": 25,
 						"random": true,
 						"anim": {
 							"enable": false
@@ -186,6 +196,7 @@
 		
 		$(document).ready(function() {
             tickInterval();
+			createSnow();
         });
         </script>
         <style>
