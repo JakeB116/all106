@@ -19,7 +19,8 @@
         let interval;
         let images = [];
 		let tick = 1;
-
+		let videoIndex = 0;
+		
         loadImages();
         buildCarousel(0);
 		
@@ -41,20 +42,48 @@
 			let width = $(window).width();
             let height = $(window).height();
 			let activeIndex = getActiveIndex();
-            images = [];
+			console.log(activeIndex);
+            images = [
+				{
+					timeLimit: 50,
+					content: '<div style="width: 100vw; height: 100vh;" class="carousel-item star-wars' + (0 === activeIndex ? ' active"' : '"') + '>'
+						+ '<img style="width: 100vw; height: 100vh;" src="./StarWars/star-wars-background.jpg" class="d-block">'
+						+ '<div class="h-100 crawl">'
+						+ '<img class="logo" src="./ITSGLOW.png" height="50%" width="90%" />'
+						+ '<div class="title"><p>All About the Pentiums<h1>Weird Al</h1></div>'
+						+ '<p>What y\'all wanna do? Wanna be hackers? Code crackers? Slackers Wastin\' time with all the chatroom yakkers? 9 to 5, chillin\' at Hewlett Packard? Workin\' at a desk with a dumb little placard?</p><br />'
+						+ '<p>Yeah, payin\' the bills with my mad programming skills Defraggin\' my hard drive for thrills (yeah, yeah, yeah, yeah) I got me a hundred gigabytes of RAM (yeah, yeah, yeah)</p><br />'
+						+ '<p>I never feed trolls and I don\'t read spam Installed a T1 line in my house Always at my PC, double-clickin\' on my mizouse Upgrade my system at least twice a day I\'m strictly plug-and-play, I ain\'t afraid of Y2K</p><br />'
+						+ '<p>I\'m down with Bill Gates, I call him "Money" for short I phone him up at home and I make him do my tech support It\'s all about the Pentiums, what? You\'ve gotta be the dumbest newbie I\'ve ever seen You\'ve got white-out all over your screen</p><br />'
+						+ '<p>You think your Commodore 64 is really neat-o What kinda chip you got in there, a Dorito? You\'re usin\' a 286? Don\'t make me laugh Your Windows boots up in what, a day and a half? You could back up your whole hard drive on a floppy diskette You\'re the biggest joke on the internet Your database is a disaster You\'re waxin\' your modem, tryin\' to make it go faster</p><br />'
+						+ '<p>Hey fella, I bet you\'re still livin\' in your parents\' cellar Downloadin\' pictures of Sarah Michelle Gellar And postin\' "me too" like some brain-dead AOL-er</p>'
+						+ '</div>'
+						+ '</div>'
+				}
+            ];
 			
 			imageSources = [
-				'./Mario/mario_1.jpg',
-				'./Mario/mario_2.jpg',
-				'./Mario/mario_3.jpg',
-				'./Mario/mario_4.jpg',
-				'./Mario/mario_6.jpg',
-				'./Mario/mario_7.jpg'
+				'./StarWars/star-wars-1.jpg',
+				'./StarWars/star-wars-2.png',
+				'./StarWars/star-wars-3.jpg',
+				'./StarWars/star-wars-4.png',
+				'./StarWars/star-wars-5.jpg',
+				'./StarWars/star-wars-6.jpg',
+				'./StarWars/star-wars-7.png'
 			];
 			
 			$(imageSources).each(function(index, el) {
-				images = images.concat(buildImageContent(index, el, activeIndex, width, height));
+				images = images.concat(buildImageContent(index + 1, el, activeIndex, width, height));
 			});
+			
+			images = images.concat({
+				timeLimit: 35,
+				content: '<div style="width: 100vw; height: 100vh;" class="carousel-item star-wars' + (images.length === activeIndex ? ' active"' : '"') + '>'
+				+ '<video id="dueloffate" width="' + width + '" height="' + height +' " muted><source src="./StarWars/obivsmaul.mp4" type="video/mp4" /></video>'
+				+ '</div>'
+			});
+			
+			videoIndex = images.length - 1;
         };
 		
 		function buildImageContent(index, source, activeIndex, width, height) {
@@ -63,7 +92,7 @@
 				content: '<div class="carousel-item' + (index === activeIndex ? ' active"' : '"') + '>'
                     + '<img src="'+ source + '" class="d-block" height="' + height + '" width="' + width + '">'
                     + '<div class="carousel-caption d-flex flex-column justify-content-center h-100">'
-                    +    '<img class="logo" src="./Mario/MarioLogo.png" height="50%" width="90%" />'
+                    +    '<img class="logo" src="./ITSGLOW.png" height="50%" width="90%" />'
                     +'</div>'
                 + '</div>'
 			};
@@ -81,10 +110,8 @@
 					tick = 0;
                 }
 				
-				let image = images[activeIndex];
-				
-				if (image.type === 'video') {
-					$('#' + image.id).trigger('play');
+				if (activeIndex === videoIndex) {
+					$('#dueloffate').trigger('play');
 				}
 				
 				tick++;
@@ -123,13 +150,13 @@
 						"nb_sides": 5
 					  },
 					  "image": {
-						"src": "./Mario/mario-snow.png",
-						"width": 240,
-						"height": 239
+						"src": "./StarWars/deathstar.png",
+						"width": 670,
+						"height": 673
 					  }
 					},
 					"number": {
-						"value": 5,
+						"value": 3,
 						"density": {
 							"enable": true,
 							"value_area": 800
@@ -146,7 +173,7 @@
 						}
 					},
 					"size": {
-						"value": 25,
+						"value": 36,
 						"random": true,
 						"anim": {
 							"enable": false
@@ -238,6 +265,49 @@
 			  top: -25px;
 			  background-image: linear-gradient(0deg, transparent, black 75%);
 			  z-index: 1;
+			}
+
+			.star-wars {
+			  display: flex;
+			  justify-content: center;
+			  position: relative;
+			  height: 800px;
+			  color: #feda4a;
+			  font-family: 'Pathway Gothic One', sans-serif;
+			  font-size: 500%;
+			  font-weight: 600;
+			  letter-spacing: 6px;
+			  line-height: 150%;
+			  perspective: 400px;
+			  text-align: justify;
+			}
+
+			.crawl {
+			  position: relative;
+			  top: 9999px;
+			  transform-origin: 50% 100%;
+			  animation: crawl 60s linear;
+			}
+
+			.crawl > .title {
+			  font-size: 90%;
+			  text-align: center;
+			}
+
+			.crawl > .title h1 {
+			  margin: 0 0 100px;
+			  text-transform: uppercase;
+			}
+
+			@keyframes crawl {
+			  0% {
+				top: 0;
+				transform: rotateX(20deg)  translateZ(0);
+			  }
+			  100% { 
+				top: -6000px;
+				transform: rotateX(25deg) translateZ(-2500px);
+			  }
 			}
 		</style>
 </body>
