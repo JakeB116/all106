@@ -44,25 +44,16 @@
             images = [];
 			
 			imageSources = [
-				'./Pokemon/pokemon_1.jpg',
-				'./Pokemon/pokemon_2_2.png',
-				'./Pokemon/pokemon_3.jpg',
-				'./Pokemon/pokemon_4.jpeg',
-				'./Pokemon/pokemon_5_2.png',
-				'./Pokemon/pokemon_6.jpg'
+				'./Hogwarts/hogwarts_1.jpg',
+				'./Hogwarts/hogwarts_2.png',
+				'./Hogwarts/hogwarts_3.jpg',
+				'./Hogwarts/hogwarts_4.jpg',
+				'./Hogwarts/hogwarts_5.jpg',
+				'./Hogwarts/hogwarts_6.jpg',
 			];
 			
-			images = images.concat({
-				timeLimit: 61,
-				type: 'video',
-				id: 'intro',
-				content: '<div style="width: 100vw; height: 100vh;" class="carousel-item' + (images.length === activeIndex ? ' active"' : '"') + '>'
-				+ '<video id="intro" width="' + width + '" height="' + height +' " muted><source src="./Pokemon/pokemon_intro.mp4" type="video/mp4" /></video>'
-				+ '</div>'
-			});
-			
 			$(imageSources).each(function(index, el) {
-				images = images.concat(buildImageContent(index + 1, el, activeIndex, width, height));
+				images = images.concat(buildImageContent(index, el, activeIndex, width, height));
 			});
         };
 		
@@ -72,7 +63,7 @@
 				content: '<div class="carousel-item' + (index === activeIndex ? ' active"' : '"') + '>'
                     + '<img src="'+ source + '" class="d-block" height="' + height + '" width="' + width + '">'
                     + '<div class="carousel-caption d-flex flex-column justify-content-center h-100">'
-                    +    '<img class="logo" src="./Pokemon/ITSLOGAPIKAPEEK_2.png" height="50%" width="90%" />'
+                    +    '<img class="logo" src="./Hogwarts/hogwarts-logo.png" height="50%" width="90%" />'
                     +'</div>'
                 + '</div>'
 			};
@@ -132,16 +123,16 @@
 						"nb_sides": 5
 					  },
 					  "image": {
-						"src": "./Pokemon/pokeball.png",
-						"width": 699,
-						"height": 698
+						"src": "./Hogwarts/hogwarts-snow.png",
+						"width": 800,
+						"height": 861
 					  }
 					},
 					"number": {
-						"value": 5,
+						"value": 3,
 						"density": {
 							"enable": true,
-							"value_area": 800
+							"value_area": 2000
 						}
 					},
 					"color": {
@@ -155,7 +146,7 @@
 						}
 					},
 					"size": {
-						"value": 25,
+						"value": 250,
 						"random": true,
 						"anim": {
 							"enable": false
@@ -166,10 +157,10 @@
 					},
 					"move": {
 						"enable": true,
-						"speed": 0.5,
-						"direction": "bottom",
+						"speed": 10,
+						"direction": "bottom-right",
 						"random": true,
-						"straight": false,
+						"straight": true,
 						"out_mode": "out",
 						"bounce": false,
 						"attract": {

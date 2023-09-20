@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="backgroundCarousel" class="carousel slide carousel-fade" data-ride="carousel" data-interval="false">
+        <div id="holidayCarouselInner" class="carousel-inner">
+        </div>
+		<div id="snow" class="snow"></div>
+    </div>
+    <script>
+        let innerCarousel = $('#holidayCarouselInner');
+        let resizeTimeout;
+        let interval;
+        let images = [];
+		let tick = 1;
+
+        loadImages();
+        buildCarousel(0);
+		
+		$(window).resize(function() {
+            if (resizeTimeout) {
+                clearTimeout(resizeTimeout);
+            }
+            resizeTimeout = setTimeout(function() {
+                // Get the currently active image
+                let activeIndex = getActiveIndex();
+                loadImages();
+                buildCarousel(activeIndex);
+				i = 1;
+                tickInterval();
+            }, 300);
+		});
+		
+        function loadImages() {
+			let width = $(window).width();
+            let height = $(window).height();
+			let activeIndex = getActiveIndex();
+            images = [];
+			
+			imageSources = [
+				'./Pokemon/pokemon_1.jpg',
+				'./Pokemon/pokemon_2_2.png',
+				'./Pokemon/pokemon_3.jpg',
+				'./Pokemon/pokemon_4.jpeg',
+				'./Pokemon/pokemon_5_2.png',
+				'./Pokemon/pokemon_6.jpg'
+			];
+			
+			images = images.concat({
+				timeLimit: 61,
+				type: 'video',
+				id: 'intro',
+				content: '<div style="width: 100vw; height: 100vh;" class="carousel-item' + (images.length === activeIndex ? ' active"' : '"') + '>'
+				+ '<video id="intro" width="' + width + '" height="' + height +' " muted><source src="./Pokemon/pokemon_intro.mp4" type="video/mp4" /></video>'
+				+ '</div>'
+			});
+			
+			$(imageSources).each(function(index, el) {
+				images = images.concat(buildImageContent(index + 1, el, activeIndex, width, height));
+			});
+        };
+		
+		function buildImageContent(index, source, activeIndex, width, height) {
+			return {
+				timeLimit: 10,
+				content: '<div class="carousel-item' + (index === activeIndex ? ' active"' : '"') + '>'
+                    + '<img src="'+ source + '" class="d-block" height="' + height + '" width="' + width + '">'
+                    + '<div class="carousel-caption d-flex flex-column justify-content-center h-100">'
+                    +    '<img class="logo" src="./Pokemon/ITSLOGAPIKAPEEK_2.png" height="50%" width="90%" />'
+                    +'</div>'
+                + '</div>'
+			};
+		}
+		
+        function tickInterval() {
+            if (interval) {
+                clearInterval(interval);
+            }
+            interval = setInterval(function() {   		
+				let activeIndex = getActiveIndex();
+				let delay = images[activeIndex].timeLimit;
+                if (tick % delay === 0) {
+                    $('#backgroundCarousel').carousel('next');
+					tick = 0;
+                }
+				
+				let image = images[activeIndex];
+				
+				if (image.type === 'video') {
+					$('#' + image.id).trigger('play');
+				}
+				
+				tick++;
+			}, 1000);
+        }
+
+        function buildCarousel() {
+            innerCarousel.empty();
+			var width = $(window).width();
+            var height = $(window).height();
+            for (let i = 0; i < images.length; i++) {
+                innerCarousel.append(images[i].content);
+            }
+        };
+		
+		function getActiveIndex() {
+			let activeIndex = 0;
+			$('.carousel-item').each(function(i, el) {
+				if ($(el).hasClass('active')) {
+					activeIndex = i;
+				}
+			});
+			return activeIndex;
+		}
+		
+		function createSnow() {
+			particlesJS("snow", {
+				"particles": {
+					"shape": {
+					  "type": "image",
+					  "stroke": {
+						"width": 0,
+						"color": "#000000"
+					  },
+					  "polygon": {
+						"nb_sides": 5
+					  },
+					  "image": {
+						"src": "./Pokemon/pokeball.png",
+						"width": 699,
+						"height": 698
+					  }
+					},
+					"number": {
+						"value": 5,
+						"density": {
+							"enable": true,
+							"value_area": 800
+						}
+					},
+					"color": {
+						"value": "#ffffff"
+					},
+					"opacity": {
+						"value": 0.7,
+						"random": false,
+						"anim": {
+							"enable": false
+						}
+					},
+					"size": {
+						"value": 25,
+						"random": true,
+						"anim": {
+							"enable": false
+						}
+					},
+					"line_linked": {
+						"enable": false
+					},
+					"move": {
+						"enable": true,
+						"speed": 0.5,
+						"direction": "bottom",
+						"random": true,
+						"straight": false,
+						"out_mode": "out",
+						"bounce": false,
+						"attract": {
+							"enable": true,
+							"rotateX": 300,
+							"rotateY": 1200
+						}
+					}
+				},
+				"interactivity": {
+					"events": {
+						"onhover": {
+							"enable": false
+						},
+						"onclick": {
+							"enable": false
+						},
+						"resize": false
+					}
+				},
+				"retina_detect": true
+			});
+		};
+		
+		$(document).ready(function() {
+            tickInterval();
+			createSnow();
+        });
+        </script>
+        <style>
+            .holiday-text {
+                
+            };
+        </style>
+		<style>
+			.snow {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				pointer-events: none;
+				z-index: 1000;
+			};
+		</style>
+		<style>
+			.snow-canvas {
+				display: block;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				position: fixed;
+				pointer-events: none;
+			}
+		</style>
+		<style>
+			.logo {
+				margin-left: auto;
+				margin-right: auto;
+			}
+		</style>
+		<style>
+			body {
+			  width: 100%;
+			  height: 100%;
+			  background: #000;
+			  overflow: hidden;
+			}
+
+			.fade {
+			  position: relative;
+			  width: 100%;
+			  min-height: 60vh;
+			  top: -25px;
+			  background-image: linear-gradient(0deg, transparent, black 75%);
+			  z-index: 1;
+			}
+		</style>
+</body>
+</html>
